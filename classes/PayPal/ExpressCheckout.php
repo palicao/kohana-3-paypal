@@ -1,4 +1,7 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
+
+defined('SYSPATH') or die('No direct script access.');
+
 /**
  * PayPal ExpressCheckout integration.
  *
@@ -9,71 +12,65 @@
  * @copyright  (c) 2009 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
- 
 class PayPal_ExpressCheckout extends PayPal {
 
-	// Default parameters
-	protected $_default = array(
-		'PAYMENTACTION' => 'Sale',
-	);
+    // Default parameters
+    protected $_default = array(
+        'PAYMENTACTION' => 'Sale',
+    );
 
-    public function DoExpressCheckoutPayment(array $params)
-    {
-        $required = array('PAYERID','TOKEN','AMT');
-        
+    public function DoExpressCheckoutPayment(array $params) {
+        $required = array('PAYERID', 'TOKEN', 'PAYMENTREQUEST_0_AMT');
+
         $params += $this->_default;
-        
+
         foreach ($required as $key) {
-            if ( ! isset($params[$key])) {
+            if (!isset($params[$key])) {
                 throw new Kohana_Exception('You must provide a :param parameter for :method',
-                    array(':param' => $key, ':method' => __METHOD__));
+                        array(':param' => $key, ':method' => __METHOD__));
             }
         }
-        
+
         return $this->_post('DoExpressCheckoutPayment', $params);
     }
-    
-    public function GetExpressCheckoutDetails(array $params)
-    {
+
+    public function GetExpressCheckoutDetails(array $params) {
         $required = array('TOKEN');
-        
+
         $params += $this->_default;
-        
+
         foreach ($required as $key) {
-            if ( ! isset($params[$key])) {
+            if (!isset($params[$key])) {
                 throw new Kohana_Exception('You must provide a :param parameter for :method',
-                    array(':param' => $key, ':method' => __METHOD__));
+                        array(':param' => $key, ':method' => __METHOD__));
             }
         }
-        
+
         return $this->_post('GetExpressCheckoutDetails', $params);
     }
 
-	/**
-	 * Make an SetExpressCheckout call.
-	 *
-	 * @param  array   NVP parameters
-	 */
-	public function set(array $params = NULL)
-	{
-		if ($params === NULL)
-		{
-			// Use the default parameters
-			$params = $this->_default;
-		}
-		else
-		{
-			// Add the default parameters
-			$params += $this->_default;
-		}
+    /**
+     * Make an SetExpressCheckout call.
+     *
+     * @param  array   NVP parameters
+     */
+    public function SetExpressCheckout(array $params = NULL) {
+        if ($params === NULL) {
+            // Use the default parameters
+            $params = $this->_default;
+        } else {
+            // Add the default parameters
+            $params += $this->_default;
+        }
 
-		if ( ! isset($params['AMT']))
-		{
-			throw new Kohana_Exception('You must provide a :param parameter for :method',
-				array(':param' => 'AMT', ':method' => __METHOD__));
-		}
+        if (!isset($params['PAYMENTREQUEST_0_AMT'])) {
+            throw new Kohana_Exception('You must provide a :param parameter for :method',
+                    array(':param' => 'PAYMENTREQUEST_0_AMT', ':method' => __METHOD__));
+        }
 
-		return $this->_post('SetExpressCheckout', $params);
-	}
+        return $this->_post('SetExpressCheckout', $params);
+    }
+    
+}
 
-} // End PayPal_ExpressCheckout
+// End PayPal_ExpressCheckout
