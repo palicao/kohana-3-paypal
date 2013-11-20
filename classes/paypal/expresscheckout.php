@@ -13,38 +13,38 @@ class PayPal_ExpressCheckout extends PayPal {
 
 	// Default parameters
 	protected $_default = array(
-		'PAYMENTACTION' => 'Sale',
+		'PAYMENTREQUEST_0_PAYMENTACTION' => 'Sale',
 	);
 
     public function DoExpressCheckoutPayment(array $params)
     {
-        $required = array('PAYERID','TOKEN','AMT');
-        
+        $required = array('PAYERID','TOKEN','PAYMENTREQUEST_0_AMT');
+
         $params += $this->_default;
-        
+
         foreach ($required as $key) {
             if ( ! isset($params[$key])) {
                 throw new Kohana_Exception('You must provide a :param parameter for :method',
                     array(':param' => $key, ':method' => __METHOD__));
             }
         }
-        
+
         return $this->_post('DoExpressCheckoutPayment', $params);
     }
-    
+
     public function GetExpressCheckoutDetails(array $params)
     {
         $required = array('TOKEN');
-        
+
         $params += $this->_default;
-        
+
         foreach ($required as $key) {
             if ( ! isset($params[$key])) {
                 throw new Kohana_Exception('You must provide a :param parameter for :method',
                     array(':param' => $key, ':method' => __METHOD__));
             }
         }
-        
+
         return $this->_post('GetExpressCheckoutDetails', $params);
     }
 
@@ -66,10 +66,10 @@ class PayPal_ExpressCheckout extends PayPal {
 			$params += $this->_default;
 		}
 
-		if ( ! isset($params['AMT']))
+		if ( ! isset($params['PAYMENTREQUEST_0_AMT']))
 		{
 			throw new Kohana_Exception('You must provide a :param parameter for :method',
-				array(':param' => 'AMT', ':method' => __METHOD__));
+				array(':param' => 'PAYMENTREQUEST_0_AMT', ':method' => __METHOD__));
 		}
 
 		return $this->_post('SetExpressCheckout', $params);

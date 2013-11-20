@@ -9,7 +9,7 @@
  * @copyright  (c) 2009 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
-abstract class PayPal {
+abstract class Paypal {
 
 	/**
 	 * @var  array  instances
@@ -24,19 +24,19 @@ abstract class PayPal {
 	 */
 	public static function instance($type)
 	{
-		if ( ! isset(PayPal::$instances[$type]))
+		if ( ! isset(Paypal::$instances[$type]))
 		{
 			// Set the class name
-			$class = 'PayPal_'.$type;
+			$class = 'Paypal_'.$type;
 
 			// Load default configuration
 			$config = Kohana::$config->load('paypal');
 
 			// Create a new PayPal instance with the default configuration
-			PayPal::$instances[$type] = new $class($config['username'], $config['password'], $config['signature'], $config['environment']);
+			Paypal::$instances[$type] = new $class($config['username'], $config['password'], $config['signature'], $config['environment']);
 		}
 
-		return PayPal::$instances[$type];
+		return Paypal::$instances[$type];
 	}
 
 	// API username
@@ -120,7 +120,7 @@ abstract class PayPal {
 		// Add the command to the parameters
 		$params = array('cmd' => '_'.$command) + $params;
 
-		return 'https://www.'.$env.'paypal.com/webscr?'.http_build_query($params, NULL, '&');
+		return 'https://www.'.$env.'paypal.com/cgi-bin/webscr?'.http_build_query($params, NULL, '&');
 	}
 
 	/**
@@ -138,7 +138,7 @@ abstract class PayPal {
 		// Create POST data
 		$post = array(
 			'METHOD'    => $method,
-			'VERSION'   => 51.0,
+			'VERSION'   => 109.0,
 			'USER'      => $this->_username,
 			'PWD'       => $this->_password,
 			'SIGNATURE' => $this->_signature,
